@@ -1,0 +1,41 @@
+---
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+''' 
+```{r}
+library(randomForest)
+library(FFTrees)
+library(ggplot2)
+library(datasets)
+library(dplyr)
+head(mushrooms)
+```
+
+```
+```{r}
+ggplot(mushrooms,aes(poisonous, fill = poisonous)) + geom_bar()
+```
+
+```{r}
+rows <- sample(nrow(mushrooms), nrow(mushrooms)*.7, replace=FALSE)
+
+train <- mushrooms[rows,]
+test <- mushrooms[-rows,]
+```
+
+```{r}
+model <- FFTrees(poisonous ~ . , train)
+model
+```
+
+```{r}
+plot(model, what = 'cues')
+```
+```{r}
+pred <- predict(model, test)
+table(pred, test$poisonous)
+```
+
